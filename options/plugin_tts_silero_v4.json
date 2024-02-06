@@ -1,0 +1,11 @@
+{
+    "put_accent": true,
+    "put_yo": true,
+    "sample_rate": 24000,
+    "speaker": "xenia",
+    "speaker_by_assname": {
+        "николай|николаю": "aidar"
+    },
+    "threads": 1,
+    "v": "2.0"
+}
