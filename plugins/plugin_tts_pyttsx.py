@@ -45,8 +45,6 @@ def init(core:VACore):
 
 
     voices = core.ttsEngine.getProperty("voices")
-    print(voices)
-    print(voices[1].id)
 
     # if assistant.speech_language == "en":
     #     assistant.recognition_language = "en-US"

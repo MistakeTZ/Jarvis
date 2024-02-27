@@ -9,13 +9,12 @@ import json
 from vacore import VACore
 
 mic_blocked = False
-mode = 0
 
 def block_mic():
     global mic_blocked
     mic_blocked = True
 
-# ------------------- vosk ------------------
+# ------------------ vosk ------------------
 if __name__ == "__main__":
     q = queue.Queue()
 

@@ -1,4 +1,6 @@
-from extractor import NumberExtractor
+from Calculator.extractor import NumberExtractor
+
+extractor = NumberExtractor()
 
 comma = (
     "и",
@@ -64,7 +66,7 @@ drob = {
     "миллиардных|миллиардная": 10**9
 }
 var = {
-    "икс": None,
+    "икс|икса": None,
     "игрек": None,
     "зет": None,
     "а": None,
@@ -83,7 +85,7 @@ def calculate(string):
         if el in string:
             a = string.split(" " + el + " ")
             if len(a) != 2:
-                return "Введено неверное число аргументов"
+                return None #"Введено неверное число аргументов"
             eq = is_cell(a[0])
             if eq == None:
                 return "Не найдена ячейка записи"
@@ -106,10 +108,9 @@ def calculate(string):
         elif eq != None:
             args.append(string)
 
-    print(act)
     print(args)
     if eq == None and (act == None or len(args) != 2):
-        return "Введено неверное число аргументов"
+        return None #"Введено неверное число аргументов"
     
     arguments = []
     after_comma = 0
@@ -127,7 +128,7 @@ def calculate(string):
                 if len(args) == 2:
                     phrase = ["первый ", "второй "][i]
                 return phrase + "аргумент не распознан"
-    print(arguments)
+    #print(arguments)
             
     res = 0
     if len(arguments) == 1:
@@ -137,12 +138,17 @@ def calculate(string):
             res = arguments[0] * arguments[1]
         elif act == '/':
             res = arguments[0] / arguments[1]
+            after_comma += 1
         elif act == '+':
             res = arguments[0] + arguments[1]
+            after_comma -= 1
         elif act == '-':
             res = arguments[0] - arguments[1]
+            after_comma -= 1
         res = round(res, after_comma + 1)
     result = str(res)
+
+    result = result.replace(".0", "")
     '''num2text(res)'''
     
     if eq != None:
@@ -218,7 +224,6 @@ def parse_numbers(string, type):
     '''
     type: 1 = целое 2 = дробное 0 = любое
     '''
-    print("Строка: {}\nТип: {}".format(string, type))
 
     replaced = 1
     if type != 1:
@@ -253,3 +258,8 @@ if __name__ == "__main__":
     while True:
         calc = input("Введите пример: ")
         print(calculate(calc))
+
+def calculator(core, ex: str):
+    string = calculate(ex)
+    if string != None:
+        core.play_voice_assistant_speech(string)

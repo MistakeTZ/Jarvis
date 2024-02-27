@@ -5,6 +5,7 @@ import hashlib
 from termcolor import colored, cprint
 import time
 from threading import Timer
+from Calculator.main import calculator
 
 from typing import Dict
 
@@ -49,6 +50,8 @@ class VACore(JaaCore):
         self.version = version
 
         self.voiceAssNames = []
+
+        self.mode = "passive"
 
         self.useTTSCache = False
         self.tts_cache_dir = "tts_cache"
@@ -347,12 +350,15 @@ class VACore(JaaCore):
         else:
             # it is function to call!
             #context(self,command)
+            
             self.context_clear()
             self.call_ext_func_phrase(command,context)
             return
 
         try:
             res = self.find_best_cmd_with_fuzzy(command,context,True)
+            
+            #print(res)
             if res is not None:
                 keyall, probability, rest_phrase = res
                 next_context = context[keyall]
@@ -381,6 +387,9 @@ class VACore(JaaCore):
                 if key == predicted_command:
                     return keyall
         return None
+    
+    # -----------  mode  -----------
+
 
     # ----------- timers -----------
     def set_timer(self, duration, timerFuncEnd, timerFuncUpd = None):
@@ -391,6 +400,7 @@ class VACore(JaaCore):
                 # print "Found timer!"
                 self.timers[i] = curtime+duration  #duration
                 self.timersFuncEnd[i] = timerFuncEnd
+                print(timerFuncEnd)
                 print("New Timer ID =", str(i), ' curtime=', curtime, 'duration=', duration, 'endtime=', self.timers[i])
                 return i
         return -1  # no more timer valid
@@ -473,6 +483,30 @@ class VACore(JaaCore):
                         self.execute_next(command_options, None)
                         haveRun = True
                         break
+
+                if not haveRun and self.mode == "active":
+                    if self.logPolicy == "cmd":
+                        print("Input (cmd): ",voice_input_str)
+
+                    command_options = " ".join([str(input_part) for input_part in voice_input])
+                    if func_before_run_cmd != None:
+                        func_before_run_cmd()
+
+
+                    context = self.commands
+                    try:
+                        res = self.find_best_cmd_with_fuzzy(command_options,context,True)
+                        if res is not None:
+                            keyall, probability, rest_phrase = res
+                            if keyall == "режим|режима|сменить режим на|сменить режим":
+                                next_context = context[keyall]
+                                self.execute_next(rest_phrase, next_context)
+                        else:
+                            calculator(self, command_options)
+                    except Exception as err:
+                        print(traceback.format_exc())
+                    haveRun = True
+
             else:
                 if self.logPolicy == "cmd":
                     print("Input (cmd in context): ",voice_input_str)
