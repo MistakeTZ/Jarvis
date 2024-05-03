@@ -5,6 +5,7 @@ import sounddevice as sd
 import vosk
 import sys
 import json
+from dotenv import load_dotenv
 
 from vacore import VACore
 
@@ -17,7 +18,7 @@ def block_mic():
 # ------------------ vosk ------------------
 if __name__ == "__main__":
     q = queue.Queue()
-
+    load_dotenv()
 
 
     def int_or_str(text):

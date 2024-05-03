@@ -13,7 +13,7 @@
     "replyNoCommandFoundInContext": "Не понял",
     "replyOnlineRequired": "Для этой команды необходим онлайн",
     "tempDir": "temp",
-    "ttsEngineId": "pyttsx",
+    "ttsEngineId": "vosk",
     "ttsEngineId2": "",
     "useTTSCache": false,
     "v": "4.0",

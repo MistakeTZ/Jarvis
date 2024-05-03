@@ -26,7 +26,7 @@ def start(core:VACore):
         },
 
         "tts": {
-            "vosk": (init,None,towavfile) # первая функция инициализации, вторая - говорить, третья - в wav file
+            "vosk": (init, None, towavfile) # первая функция инициализации, вторая - говорить, третья - в wav file
                                          # если вторая - None, то используется 3-я с проигрыванием файла
         }
     }
@@ -40,6 +40,7 @@ def init(core:VACore):
 
     core.ttsModel = Model(model_name = options['modelId'])
     core.ttsSynth = Synth(core.ttsModel)
+    core.say("Ассистент включен в пассивном режиме")
 
 def towavfile(core:VACore, text_to_speech:str,wavfile:str):
     """

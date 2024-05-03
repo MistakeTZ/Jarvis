@@ -1,4 +1,6 @@
 from Calculator.extractor import NumberExtractor
+from utils.num_to_text_ru import num2text, decimal2text
+import decimal
 
 extractor = NumberExtractor()
 
@@ -43,7 +45,7 @@ drob_first = {
 drob = {
     "вторых|вторая": 2,
     "третьих|третья": 3,
-    "четвертых|четвертая": 4,
+    "четвёртых|четвёртая": 4,
     "пятых|пятая": 5,
     "шестых|шестая": 6,
     "седьмых|седьмая": 7,
@@ -108,7 +110,7 @@ def calculate(string):
         elif eq != None:
             args.append(string)
 
-    print(args)
+    print(*args, act)
     if eq == None and (act == None or len(args) != 2):
         return None #"Введено неверное число аргументов"
     
@@ -120,6 +122,7 @@ def calculate(string):
             arguments.append(var[cell])
         else:
             num, after = to_num(args[i])
+            print(num)
             after_comma = max(after, after_comma)
             if num != None:
                 arguments.append(num)
@@ -128,7 +131,6 @@ def calculate(string):
                 if len(args) == 2:
                     phrase = ["первый ", "второй "][i]
                 return phrase + "аргумент не распознан"
-    #print(arguments)
             
     res = 0
     if len(arguments) == 1:
@@ -146,10 +148,11 @@ def calculate(string):
             res = arguments[0] - arguments[1]
             after_comma -= 1
         res = round(res, after_comma + 1)
-    result = str(res)
 
-    result = result.replace(".0", "")
-    '''num2text(res)'''
+    if res % 1.0 > 0:
+        result = num2text(int(res)) + " запятая " + num2text(int(str(res).split(".")[1]))
+    else:
+        result = num2text(int(res))
     
     if eq != None:
         var[eq] = res
@@ -196,8 +199,8 @@ def to_num(string):
         if cel_num == None:
             return None, 0
         if divider == -1:
-            after_point_num = parse_numbers(after_point, 1)
-            divider = len(str(after_point_num))
+            after_point_num, _ = parse_numbers(after_point, 1)
+            divider = len(str(after_point_num)) * 10
         else:
             after_point_num, divider = parse_numbers(after_point, 2)
     else:
@@ -261,5 +264,6 @@ if __name__ == "__main__":
 
 def calculator(core, ex: str):
     string = calculate(ex)
+    print(string)
     if string != None:
         core.play_voice_assistant_speech(string)

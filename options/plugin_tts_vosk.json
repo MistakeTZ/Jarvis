@@ -1,5 +1,5 @@
 {
-    "modelId": "vosk-model-tts-ru-0.4-multi",
+    "modelId": "vosk-model-tts-ru-0.6-multi",
     "speakerId": 4,
     "v": "1.2"
 }

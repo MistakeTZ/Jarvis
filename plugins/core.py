@@ -44,7 +44,7 @@ def start(core:VACore):
             "isOnline": True,
             #"ttsIndex": 0,
             "useTTSCache": False,
-            "ttsEngineId": "pyttsx",
+            "ttsEngineId": "vosk",
             "ttsEngineId2": "", # двиг для прямой озвучки на сервере. Если пуст - используется ttsEngineId
             "playWavEngineId": "audioplayer",
             "linguaFrancaLang": "ru", # язык для библиотеки lingua-franca конвертирования чисел
